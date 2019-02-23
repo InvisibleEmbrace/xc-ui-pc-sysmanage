@@ -27,19 +27,17 @@
       style="width: 100%">
       <el-table-column type="index" width="60">
       </el-table-column>
-      <el-table-column prop="pageName" label="页面名称" width="120">
+      <el-table-column prop="pageName" label="页面名称" width="100">
       </el-table-column>
       <el-table-column prop="pageAliase" label="别名" width="120">
       </el-table-column>
-      <el-table-column prop="pageType" label="页面类型" width="150">
+      <el-table-column prop="pageType" label="页面类型" width="100">
       </el-table-column>
       <el-table-column prop="pageWebPath" label="访问路径" width="250">
       </el-table-column>
       <el-table-column prop="pagePhysicalPath" label="物理路径" width="250">
       </el-table-column>
-      <el-table-column prop="pageCreateTime" label="创建时间" width="180" >
-      </el-table-column>
-      <el-table-column label="操作" width="80">
+      <el-table-column label="操作" width="180">
         <template slot-scope="page">
           <el-button
             size="small"type="text"
@@ -49,6 +47,8 @@
             size="small"type="text"
             @click="del(page.row.pageId)">删除
           </el-button>
+          <el-button @click="preview(page.row.pageId)" type="text" size="small">页面预览</el-button>
+          <el-button @click="postPage(page.row.pageId)" type="primary" size="small">发布</el-button>
         </template>
 
       </el-table-column>
@@ -102,11 +102,7 @@
       edit:function(pageId){
         //打开修改页面
         this.$router.push({
-          path:'/cms/page/edit/'+pageId,
-          query: {
-            page:this.$route.query.page,//取出路由中的参数
-            siteId:this.$route.query.siteId
-          }
+          path:'/cms/page/edit/'+pageId
         })
       },
       del:function (pageId) {
@@ -125,6 +121,25 @@
           })
         })
 
+      },
+      preview:function (pageId) {
+        //打开浏览器窗口
+        window.open("http://www.xuecheng.com/cms/preview/"+pageId);
+      },
+      postPage (id) {
+        this.$confirm('确认发布该页面吗?', '提示', {
+        }).then(() => {
+          cmsApi.page_postPage(id).then((res) => {
+            if(res.success){
+              console.log('发布页面id='+id);
+              this.$message.success('发布成功，请稍后查看结果');
+            }else{
+              this.$message.error('发布失败');
+            }
+          });
+        }).catch(() => {
+          
+        });
       }
     },
     created(){

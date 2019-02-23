@@ -12,7 +12,7 @@ export const page_list = (page,size,params) => {
 
 
 //新增页面
-export const page_add = params =>{
+export const page_add = params =>{requestQuickGet
   return http.requestPost(apiUrl+'/cms/page/add',params)
 }
 //根据id查询页面
@@ -29,3 +29,7 @@ export const page_del= (id) =>{
   return http.requestDelete(apiUrl+'/cms/page/del/'+id)
 }
 
+/*发布页面*/
+export const page_postPage= id => {
+  return http.requestPost(apiUrl+'/cms/page/postPage/'+id)
+}
